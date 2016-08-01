@@ -25,11 +25,11 @@ class Wheel
 end
 
 class Bike
-  def initialize(chainring: 12,cog: 11,rim: 11,tire: 11)
-     @chainring=chainring
-     @cog=cog
-     @rim=rim
-     @tire=tire
+  def initialize(table:)
+     @chainring=table["chainring"]
+     @cog=table["cog"]
+     @rim=table["rim"]
+     @tire=table["tire"]
     gear
     wheel
   end
@@ -49,19 +49,19 @@ class Bike
 end
 
 class List
-  def initialize(list_of_parameters:)
-    @list_of_parameters=list_of_parameters
+  def initialize(raw_bikes:)
+    @raw_bikes=raw_bikes
   end
 
   def create_bike_list
-    @list_of_bikes=[]
-    @list_of_parameters.each do |item_on_the_list|
-      @list_of_bikes << Bike.new(chainring: item_on_the_list["chainring"],cog: item_on_the_list["cog"],
-      rim: item_on_the_list["rim"],tire: item_on_the_list["tire"])
+    @bikes=[]
+    @raw_bikes.each do |item_on_the_list|
+      @bikes << Bike.new(table: item_on_the_list)
     end
+    @bikes=@bikes.map
   end
    def list_information
-     @list_of_bikes.each do |item_on_the_list|
+     @bikes.each do |item_on_the_list|
        item_on_the_list.informations
      end
    end
@@ -78,6 +78,6 @@ b3={"chainring" => 32,
     "cog" => 5,
     "rim" => 24,
     "tire" => 6}
-list=List.new(list_of_parameters:[b1,b2,b3])
+list=List.new(raw_bikes:[b1,b2,b3])
 list.create_bike_list
 list.list_information
