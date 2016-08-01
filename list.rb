@@ -26,23 +26,23 @@ end
 
 class Bike
   def initialize(table)
-    @chainring=table[0]
-    @cog=table[1]
-    @rim=table[2]
-    @tire=table[3]
+    @chainring=table["chainring"] || 40
+    @cog=table["cog"] || 23
+    @rim=table["rim"] || 14
+    @tire=table["tire"] || 67
     gear
     wheel
   end
 
   def gear
-    @gear=Gear.new(@chainring,@cog)
+    @gear||=Gear.new(@chainring,@cog)
   end
 
   def wheel
-    @wheel=Wheel.new(@rim,@tire)
+    @wheel||=Wheel.new(@rim,@tire)
   end
 
-  def informacions
+  def informations
     puts "Gear value is #{@gear.ratio}"
     puts "Wheel value is #{@wheel.diameter}"
   end
@@ -55,17 +55,28 @@ class List
 
   def create_bike_list
     @bike_list=[]
-    (0...@list.size).each do |i|
-      @bike_list.push(bike=Bike.new(@list[i]))
+    @list.each do |position|
+      @bike_list << Bike.new(position)
     end
   end
-   def list_informaction
-    (0...@bike_list.size).each do |i|
-      puts "Bike nr #{i+1}:"
-       @bike_list[i].informacions
+   def list_information
+     @bike_list.each do |position|
+       position.informations
      end
    end
 end
-list=List.new([[13,53,65,86],[6,3,45,13],[32,5,24,6]])
+b1={"chainring" => 13,
+  "cog" => 53,
+  "rim" => 65,
+  "tire" => 86}
+b2={"chainring" => 6,
+  "cog" => 3,
+  "rim" => 45,
+  "tire" => 13}
+b3={"chainring" => 32,
+    "cog" => 5,
+    "rim" => 24,
+    "tire" => 6}
+list=List.new([b1,b2,b3])
 list.create_bike_list
-list.list_informaction
+list.list_information
